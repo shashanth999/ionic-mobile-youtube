@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title></title>
+
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Lato%3A100%2C300%2C400%2C700%2C900%2C400italic%2C700italic" rel="stylesheet" type="text/css">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
+
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="lib/ngCordova/dist/ng-cordova.js"></script>
+    <script src="cordova.js"></script>
+
+    <!-- Ionic ios9 patch -->
+    <script src="lib/angular-ios9-uiwebview-patch/angular-ios9-uiwebview-patch.js"></script>
+
+    <!-- Include YT library and this directive -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="lib/angular-youtube-mb/dist/angular-youtube-embed.min.js"></script>
+
+    <!-- your app's js -->
+    <script src="js/app.js"></script>
+  </head>
+  <body ng-app="youtubevideo" ng-controller="mycontroller">
+
+    <ion-pane>
+      <ion-header-bar class="bar-positive">
+        <!-- <h1 class="title"></h1> -->
+        <h1 class="title">My Video App</h1>
+        <button class="button button-icon icon ion-ios-cog" ng-click="settingClick()"></button>
+      </ion-header-bar>
+
+      <ion-content class="has-noheader">
+        <!-- <div class="header-image"></div> -->
+<!--         <ion-refresher
+          pulling-text="Pull to refresh..."
+          on-refresh="loadNewerVideos()">
+        </ion-refresher> -->
+
+        <div class="list card" ng-repeat="video in videos" ng-if="!wordpress.show">
+          <div class="item item-text-wrap">
+            <h2>{{video.snippet.title}}</h2>
+            <p><i class="ion ion-ios-calendar-outline"></i> {{video.snippet.publishedAt | limitTo: 10}}</p>
+          </div>
+          <div class="item item-image">
+            <!-- <img ng-src="{{video.snippet.thumbnails.high.url}}"> -->
+            <!-- Use 'youtube-video' as an element or attribute. -->
+            <div class="embed-responsive embed-responsive-16by9">
+              <youtube-video class="embed-responsive-item" video-id="video.id.videoId" player-vars="playerVars"></youtube-video>
+            </div>
+          </div>
+          <div class="item item-divider">
+            <button class="button button-outline button-block button-positive" ng-click="socialShare(video.snippet.title, video.snippet.thumbnails.high.url, (&apos;https://www.youtube.com/watch?v=&apos; + video.id.videoId))">
+              Share this Video
+            </button>
+          </div>
+        </div>
+
+        <div class="list card" ng-repeat="post in posts" ng-if="wordpress.show">
+          <div class="item item-text-wrap">
+            <h2>{{post.title}}</h2>
+            <p><i class="ion ion-ios-calendar-outline"></i> {{post.date | limitTo: 10}}</p>
+          </div>
+          <div class="item item-image">
+            <div class="embed-responsive embed-responsive-16by9">
+              <youtube-video class="embed-responsive-item" video-id="post.meta.youtube_video_id" player-vars="playerVars"></youtube-video>
+            </div>
+          </div>
+          <div class="item item-divider">
+            <button class="button button-outline button-block button-positive" ng-click="socialShare(post.title, post.featured_image.source, post.link)">
+              Share this Video
+            </button>
+          </div>
+        </div>
+
+        <!-- <ion-infinite-scroll
+          on-infinite="loadOlderVideos()"
+          distance="30%">
+        </ion-infinite-scroll> -->
+      </ion-content>
+    </ion-pane>
+  </body>
+</html>
